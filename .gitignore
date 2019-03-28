@@ -231,6 +231,8 @@ instance/
 
 # Sphinx documentation
 docs/_build/
+docs/build/doctrees
+docs/source/
 
 # PyBuilder
 target/
@@ -288,4 +290,4 @@ pip-selfcheck.json
 
 # Customfiles
 temp.*
-docs/
+# docs/
