@@ -39,7 +39,7 @@ class MovieViewSet(MultiSerializerViewSet):
     }
 
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_class = MoviesFilter
+    filterset_class = MoviesFilter
 
     ordering_fields = ('year', 'country', 'imdb_rating',)
 
@@ -69,14 +69,15 @@ class MovieViewSet(MultiSerializerViewSet):
             date_start = parser.parse(period_start)
             date_end = parser.parse(period_end)
 
-        comments = self.get_queryset() \
+        top_movies = self.get_queryset() \
             .prefetch_related('comments') \
             .filter(comments__created__range=[date_start, date_end]) \
             .annotate(total_comments=Count('comments'),
                       rank=Window(
                           expression=DenseRank(),
                           order_by=F('total_comments').desc(),
-                      ), )
+                      ),) \
+            .values('id', 'total_comments', 'rank',)
 
-        serializer = self.get_serializer(comments, many=True)
+        serializer = self.get_serializer(top_movies, many=True)
         return Response(serializer.data)

@@ -1,5 +1,5 @@
 -r prod.txt
-
+coverage==4.5.3
 flake8==3.7.7
   - entrypoints [required: >=0.3.0,<0.4.0, installed: 0.3]
   - mccabe [required: >=0.6.0,<0.7.0, installed: 0.6.1]
