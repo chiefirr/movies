@@ -29,9 +29,16 @@ To use production version run:
 pip install -r requirements.txt
 ```
 
-To use development version run:
+To use full development version run:
 ```
 pip install -r requirements/dev.txt
+```
+
+### Available API
+```
+/api/movies/
+/api/movies/top/?period_start=<date>&period_end=<date>
+/api/comments/
 ```
 
 ## Running the tests
@@ -58,7 +65,7 @@ bandit -r .
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+Additional notes about deployment will go here.
 
 ## Built With
 
