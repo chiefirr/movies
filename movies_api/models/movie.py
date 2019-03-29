@@ -1,11 +1,8 @@
 import datetime
 
 from django.contrib.postgres import fields
-from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
-
-User = get_user_model()
 
 
 def current_year():
@@ -17,20 +14,6 @@ def max_value_current_year(value):
 
 
 class Movie(models.Model):
-    # GENERAL = 'General Audiences'
-    # PARENTAL_SUGGESTED = 'Parental Guidance Suggested'
-    # PARENTS_CAUTIONED = 'Parents Strongly Cautioned'
-    # RESTRICRED = 'Restricted'
-    # ADULTS_ONLY = 'Adults Only'
-    #
-    # AGE_RESTRICTIONS = (
-    #     (GENERAL, 'G'),
-    #     (PARENTAL_SUGGESTED, 'PG'),
-    #     (PARENTS_CAUTIONED, 'PG-13'),
-    #     (RESTRICRED, 'R'),
-    #     (ADULTS_ONLY, 'NC-17'),
-    # )
-
     class Meta:
         unique_together = ('imdb_id', 'title',)
 

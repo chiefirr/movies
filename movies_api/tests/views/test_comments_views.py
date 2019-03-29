@@ -1,6 +1,5 @@
 import datetime
 
-from rest_framework.exceptions import ValidationError
 from rest_framework.test import APIRequestFactory, APITestCase, APIClient
 
 from movies_api.models import Movie, Comment
@@ -51,30 +50,20 @@ class TestCommentViewSet(APITestCase):
         self.movie_1 = Movie.objects.create(**self.movie_body_1)
         self.movie_2 = Movie.objects.create(**self.movie_body_2)
 
-    def test_retrieve_movie_object(self):
-        response_retrieve = self.client.get(f'/api/movies/{self.movie_1.pk}/')
-        response_retrieve_404 = self.client.get(f'/api/comments/{self.movie_1.pk + 100}/')
+        self.comment_body_1 = {"movie": self.movie_1, "text": "Test text 1"}
+        self.comment_body_2 = {"movie": self.movie_2, "text": "Test text 2"}
+
+        self.comment = Comment.objects.create(**self.comment_body_1)
+
+    def test_retrieve_comment_object(self):
+        comment = Comment.objects.create(**self.comment_body_1)
+        response_retrieve = self.client.get(f'/api/comments/{comment.pk}/')
+        response_retrieve_404 = self.client.get(f'/api/comments/{comment.pk + 1}/')
 
         self.assertEqual(response_retrieve.status_code, 200)
         self.assertEqual(response_retrieve_404.status_code, 404)
 
-    def test_post_movie_object(self):
-        response_retrieve_1 = self.client.post(f'/api/movies/', {"title": "Titanic"})
-        self.assertEqual(response_retrieve_1.status_code, 201)
+    def test_post_comment_object(self):
+        response_retrieve = self.client.post(f'/api/comments/', {"movie": self.movie_1.pk, "text": "Test text 1"})
 
-        with self.assertRaises(AssertionError):
-            response_retrieve_2 = self.client.post(f'/api/movies/', {"title": "Titanic"})
-            self.assertEqual(response_retrieve_2.status_code, 201)
-
-        response_retrieve_3 = self.client.post(f'/api/movies/', {"no_title": ""})
-        self.assertEqual(response_retrieve_3.status_code, 400)
-
-    def test_top_movies(self):
-        response_top_1 = self.client.get(f'/api/movies/top/')
-        self.assertEqual(response_top_1.status_code, 400)
-
-        response_top_2 = self.client.get(f'/api/movies/top/?period_start=bad_date&period_end=bad_date')
-        self.assertEqual(response_top_2.status_code, 400)
-
-        response_top_2 = self.client.get(f'/api/movies/top/?period_start=1-01-2019&period_end=10-01-2019')
-        self.assertEqual(response_top_2.status_code, 200)
+        self.assertEqual(response_retrieve.status_code, 201)

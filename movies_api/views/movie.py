@@ -39,7 +39,7 @@ class MovieViewSet(MultiSerializerViewSet):
     }
 
     filter_backends = (DjangoFilterBackend, OrderingFilter)
-    filter_class = MoviesFilter
+    filterset_class = MoviesFilter
 
     ordering_fields = ('year', 'country', 'imdb_rating',)
 

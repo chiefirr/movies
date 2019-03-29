@@ -20,4 +20,4 @@ class CommentViewSet(MultiSerializerViewSet):
     }
 
     filter_backends = (DjangoFilterBackend,)
-    filter_class = CommentsFilter
+    filterset_class = CommentsFilter
