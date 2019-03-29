@@ -1,5 +1,6 @@
 import datetime
 
+from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase, APIClient
 
 from movies_api.models import Movie, Comment
@@ -60,10 +61,12 @@ class TestCommentViewSet(APITestCase):
         response_retrieve = self.client.get(f'/api/comments/{comment.pk}/')
         response_retrieve_404 = self.client.get(f'/api/comments/{comment.pk + 1}/')
 
-        self.assertEqual(response_retrieve.status_code, 200)
-        self.assertEqual(response_retrieve_404.status_code, 404)
+        self.assertEqual(response_retrieve.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_retrieve_404.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_post_comment_object(self):
+        comments_count = Comment.objects.all().count()
         response_retrieve = self.client.post(f'/api/comments/', {"movie": self.movie_1.pk, "text": "Test text 1"})
 
-        self.assertEqual(response_retrieve.status_code, 201)
+        self.assertEqual(response_retrieve.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Comment.objects.all().count(), comments_count + 1)

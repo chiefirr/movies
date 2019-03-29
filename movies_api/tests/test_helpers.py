@@ -1,36 +1,48 @@
+from unittest import TestCase
+
 import pytest
 import datetime
 from dateutil import parser
 from collections import namedtuple
 
+class ExceptionTestCase(TestCase):
+    ERRORS = {
+        "bad_input": "Bad input.",
+        "server_error": "Ooops! Looks like we have broken external API! :) Try another title.",
+        "does_not_exist": "Looks like film with this title does not exist.",
+    }
 
-def test_check_status():
-    from movies_api.helpers.movie_helpers import _check_status
-    Response = namedtuple('Response', ['status_code', 'json'])
+    def test_check_status(self):
+        from movies_api.helpers.movie_helpers import _check_status
+        Response = namedtuple('Response', ['status_code', 'json'])
 
-    def json_true():
-        return {"Response": "True"}
+        def json_true():
+            return {"Response": "True"}
 
-    def json_false():
-        return {"Response": "False"}
+        def json_false():
+            return {"Response": "False"}
 
-    response_200 = Response(200, json_false)
-    response_400 = Response(400, json_true)
-    response_404 = Response(404, json_true)
-    response_500 = Response(500, json_true)
+        response_200 = Response(200, json_false)
+        response_400 = Response(400, json_true)
+        response_404 = Response(404, json_true)
+        response_500 = Response(500, json_true)
 
-    from movies_api.exceptions import MoviesAPIError
-    with pytest.raises(MoviesAPIError):
-        _check_status(response_200)
+        from movies_api.exceptions import MoviesAPIError
+        with self.assertRaises(MoviesAPIError) as context:
+            _check_status(response_200)
+        self.assertEqual(context.exception.message['error'], self.ERRORS["does_not_exist"])
 
-    with pytest.raises(MoviesAPIError):
-        _check_status(response_400)
+        with self.assertRaises(MoviesAPIError) as context2:
+            _check_status(response_400)
+        self.assertEqual(context2.exception.message['error'], self.ERRORS["bad_input"])
 
-    with pytest.raises(MoviesAPIError):
-        _check_status(response_404)
+        with self.assertRaises(MoviesAPIError) as context3:
+            _check_status(response_404)
+        self.assertEqual(context3.exception.message['error'], self.ERRORS["bad_input"])
 
-    with pytest.raises(MoviesAPIError):
-        _check_status(response_500)
+        with self.assertRaises(MoviesAPIError) as context4:
+            _check_status(response_500)
+        self.assertEqual(context4.exception.message['error'], self.ERRORS["server_error"])
 
 
 def test_build_movie_dict():
