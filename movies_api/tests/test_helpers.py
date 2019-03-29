@@ -1,9 +1,9 @@
+import datetime
+from collections import namedtuple
 from unittest import TestCase
 
-import pytest
-import datetime
 from dateutil import parser
-from collections import namedtuple
+
 
 class ExceptionTestCase(TestCase):
     ERRORS = {
@@ -85,33 +85,33 @@ def test_replace_na():
     test_dict = {"one": "one", "two": "N/A"}
     _replace_na(test_dict)
     assert test_dict["one"] == "one"
-    assert test_dict["two"] == None
+    assert test_dict["two"] is None
 
 
 def test_movie_duration():
     from movies_api.helpers.movie_helpers import _movie_duration
     assert _movie_duration("150 minutes") == datetime.timedelta(minutes=150)
-    assert _movie_duration(None) == None
+    assert _movie_duration(None) is None
 
 
 def test_parse_date():
     from movies_api.helpers.movie_helpers import _parse_date
     movie_release_date = "19 Dec 1997"
     assert _parse_date(movie_release_date) == parser.parse(movie_release_date).date()
-    assert _parse_date(None) == None
+    assert _parse_date(None) is None
 
 
 def test_parse_str_into_list():
     from movies_api.helpers.movie_helpers import _parse_str_into_list
     test_data = "Test one, Test two, Test three"
     assert _parse_str_into_list(test_data) == ["Test one", "Test two", "Test three"]
-    assert _parse_str_into_list(None) == None
+    assert _parse_str_into_list(None) is None
 
 
 def test_parse_votes():
     from movies_api.helpers.movie_helpers import _parse_votes
     assert _parse_votes("941,210") == 941210
-    assert _parse_votes(None) == None
+    assert _parse_votes(None) is None
 
 
 def test_parse_boxoffice():

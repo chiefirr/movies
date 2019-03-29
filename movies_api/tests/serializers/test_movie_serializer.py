@@ -1,5 +1,4 @@
 from django.test import TestCase
-from rest_framework.test import APITestCase
 
 from movies_api.models import Movie
 from movies_api.serializers import MovieBaseSerializer, MoviesTopSerializer
@@ -26,7 +25,7 @@ class MovieSerializerTests(TestCase):
                               ('id', 'title', 'year', 'imdb_id', 'rated', 'released', 'runtime', 'genres', 'director',
                                'writer', 'actors', 'plot', 'languages', 'country', 'awards', 'poster',
                                'ratings', 'metascore', 'imdb_rating', 'imdb_votes', 'type', 'dvd',
-                               'box_office', 'production', 'website', ))
+                               'box_office', 'production', 'website',))
 
     def test_top_serializer_expected_fields(self):
         data = MoviesTopSerializer(instance=self.top_movie)

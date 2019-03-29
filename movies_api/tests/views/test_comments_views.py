@@ -1,10 +1,9 @@
 import datetime
 
 from rest_framework import status
-from rest_framework.test import APIRequestFactory, APITestCase, APIClient
+from rest_framework.test import APIRequestFactory, APITestCase
 
 from movies_api.models import Movie, Comment
-from movies_api.views import CommentViewSet
 
 
 class TestCommentViewSet(APITestCase):

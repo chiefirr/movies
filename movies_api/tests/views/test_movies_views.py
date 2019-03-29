@@ -1,11 +1,9 @@
 import datetime
 
 from rest_framework import status
-from rest_framework.exceptions import ValidationError
-from rest_framework.test import APIRequestFactory, APITestCase, APIClient
+from rest_framework.test import APIRequestFactory, APITestCase
 
-from movies_api.models import Movie, Comment
-from movies_api.views import CommentViewSet
+from movies_api.models import Movie
 
 
 class TestCommentViewSet(APITestCase):
@@ -63,7 +61,7 @@ class TestCommentViewSet(APITestCase):
         movies_count = Movie.objects.all().count()
         response_retrieve_1 = self.client.post(f'/api/movies/', {"title": "Titanic"})
         self.assertEqual(response_retrieve_1.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(Movie.objects.all().count(), movies_count+1)
+        self.assertEqual(Movie.objects.all().count(), movies_count + 1)
 
         with self.assertRaises(AssertionError):
             response_retrieve_2 = self.client.post(f'/api/movies/', {"title": "Titanic"})
