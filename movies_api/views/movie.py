@@ -77,7 +77,7 @@ class MovieViewSet(MultiSerializerViewSet):
                           expression=DenseRank(),
                           order_by=F('total_comments').desc(),
                       ),) \
-            .values('id', 'total_comments', 'rank')
+            .values('id', 'total_comments', 'rank',)
 
         serializer = self.get_serializer(top_movies, many=True)
         return Response(serializer.data)
