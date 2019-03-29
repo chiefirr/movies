@@ -75,4 +75,4 @@ Additional notes about deployment will go here.
 
 ## Author
 
-* **Chiefir** - [LinkedIn](www.linkedin.com/in/andrii-isiuk)
+* **Chiefir** - [LinkedIn](https://www.linkedin.com/in/andrii-isiuk/)
