@@ -115,9 +115,8 @@ DATETIME_FORMAT = "%H:%M:%S %d-%m-%Y"
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # User model
 AUTH_USER_MODEL = 'core.ExtendedUser'
