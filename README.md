@@ -8,9 +8,9 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-Python > 3.6.5 
-Django > 2.1
-PostgreSQL > 9.5
+* Python > 3.6.5 <br />
+* Django > 2.1 <br />
+* PostgreSQL > 9.5 - <i>project uses database specific fields.</i> <br />
 
 
 ### Environment:
@@ -22,6 +22,7 @@ Before you run the project you need to create a **.env** file.
 * DB_PASSWORD - databas password
 * API_KEY - your API key to access http://www.omdbapi.com/
 
+**After pulling application remember to change settings DEBUG = True!**<br /> Otherwise application will use production settings. 
 ### Installing
 
 To use production version run:
@@ -69,7 +70,12 @@ bandit -r .
 
 ## Deployment
 
-Additional notes about deployment will go here.
+Application is ready for deployment on Heroku. Just change DEBUG = False, create app, push repo and enjoy!<br />
+Rembember to add **HEROKU_HOST** variable:
+```.env
+heroku config:set HEROKU_HOST=<you_host_name>
+``` 
+
 
 ## Built With
 

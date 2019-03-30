@@ -1,8 +1,13 @@
 django-filter==2.1.0
   - Django [required: >=1.11, installed: 2.1.7]
     - pytz [required: Any, installed: 2018.9]
+django-heroku==0.3.1
+  - dj-database-url [required: >=0.5.0, installed: 0.5.0]
+  - django [required: Any, installed: 2.1.7]
+    - pytz [required: Any, installed: 2018.9]
+  - psycopg2 [required: Any, installed: 2.7.7]
+  - whitenoise [required: Any, installed: 4.1.2]
 djangorestframework==3.9.2
-psycopg2==2.7.7
 pytest-django==3.4.8
   - pytest [required: >=3.6, installed: 4.3.1]
     - atomicwrites [required: >=1.0, installed: 1.3.0]
