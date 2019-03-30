@@ -28,6 +28,10 @@ To use production version run:
 ```
 pip install -r requirements.txt
 ```
+To use minimal basic requirements version run:
+```
+pip install -r requirements/base.txt
+```
 
 To use full development version run:
 ```

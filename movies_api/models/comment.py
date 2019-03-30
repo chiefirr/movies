@@ -10,3 +10,6 @@ class Comment(TimeStampedModel):
                               )
 
     text = models.TextField()
+
+    def __str__(self):
+        return f'Comment {self.pk}: to movie {self.movie}'

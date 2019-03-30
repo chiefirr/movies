@@ -2,6 +2,7 @@ import datetime
 
 import requests
 from dateutil import parser
+from rest_framework.exceptions import ValidationError
 
 from movies.settings import API_URL, API_KEY
 from movies_api.exceptions import MoviesAPIError
@@ -19,9 +20,9 @@ def build_movie_dict(movie: dict):
     movie_dict = dict(
         imdb_id=movie.get('imdbID'),
         title=movie.get('Title'),
-        year=movie.get('Year'),
+        year=_parse_year(movie.get('Year')),
         rated=movie.get('Rated'),
-        released=_parse_date(movie.get('Year')),
+        released=_parse_date(movie.get('Released')),
         runtime=_movie_duration(movie.get('Runtime')),
         genres=_parse_str_into_list(movie.get('Genre')),
         director=movie.get('Director'),
@@ -91,6 +92,14 @@ def _check_status(response):
     result = response.json()
     if result.get('Response', 'False') == 'False':
         raise MoviesAPIError({"error": ERRORS["does_not_exist"]})
+
+
+def _parse_year(year):
+    """Year parser"""
+    try:
+        return int(year.split('–')[0])
+    except (ValueError, AttributeError):
+        raise ValidationError({"error": "This movie has bad release date format. You can't save it."})
 
 
 def _parse_date(movie_release):

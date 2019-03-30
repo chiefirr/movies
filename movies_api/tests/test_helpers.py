@@ -2,7 +2,9 @@ import datetime
 from collections import namedtuple
 from unittest import TestCase
 
+import pytest
 from dateutil import parser
+from rest_framework.exceptions import ValidationError
 
 
 class ExceptionTestCase(TestCase):
@@ -62,22 +64,22 @@ def test_build_movie_dict():
                 'BoxOffice': 'N/A', 'Production': 'Warner Bros. Pictures',
                 'Website': 'https://www.warnerbros.com/casablanca', 'Response': 'True'}
 
-    test_dict = {'imdb_id': 'tt0034583', 'title': 'Casablanca', 'year': '1942', 'rated': 'PG',
-                 'released': datetime.date(1942, 3, 29), 'runtime': datetime.timedelta(0, 6120),
-                 'genres': ['Drama', 'Romance', 'War'], 'director': 'Michael Curtiz',
-                 'writer': ['Julius J. Epstein (screenplay)', 'Philip G. Epstein (screenplay)',
-                            'Howard Koch (screenplay)', 'Murray Burnett (play)', 'Joan Alison (play)'],
-                 'actors': ['Humphrey Bogart', 'Ingrid Bergman', 'Paul Henreid', 'Claude Rains'],
-                 'plot': 'A cynical nightclub owner protects an old flame and her husband from Nazis in Morocco.',
-                 'languages': ['English', 'French', 'German', 'Italian'], 'country': 'USA',
-                 'awards': 'Won 3 Oscars. Another 5 wins & 9 nominations.',
-                 'poster': 'https://m.media-amazon.com/images/M/MV5BY2IzZGY2YmEtYzljNS00NTM5LTgwMzUtMzM1NjQ4NGI0OTk0XkEyXkFqcGdeQXVyNDYyMDk5MTU@._V1_SX300.jpg',
-                 'ratings': [{'Source': 'Internet Movie Database', 'Value': '8.5/10'},
-                             {'Source': 'Rotten Tomatoes', 'Value': '97%'},
-                             {'Source': 'Metacritic', 'Value': '100/100'}], 'metascore': '100', 'imdb_rating': '8.5',
-                 'imdb_votes': 468884, 'type': 'movie', 'dvd': datetime.date(2000, 2, 15), 'box_office': None,
-                 'production': 'Warner Bros. Pictures', 'website': 'https://www.warnerbros.com/casablanca'}
-    assert build_movie_dict(raw_data) == test_dict
+    result_dict = {'imdb_id': 'tt0034583', 'title': 'Casablanca', 'year': 1942, 'rated': 'PG',
+                   'released': datetime.date(1943, 1, 23), 'runtime': datetime.timedelta(0, 6120),
+                   'genres': ['Drama', 'Romance', 'War'], 'director': 'Michael Curtiz',
+                   'writer': ['Julius J. Epstein (screenplay)', 'Philip G. Epstein (screenplay)',
+                              'Howard Koch (screenplay)', 'Murray Burnett (play)', 'Joan Alison (play)'],
+                   'actors': ['Humphrey Bogart', 'Ingrid Bergman', 'Paul Henreid', 'Claude Rains'],
+                   'plot': 'A cynical nightclub owner protects an old flame and her husband from Nazis in Morocco.',
+                   'languages': ['English', 'French', 'German', 'Italian'], 'country': 'USA',
+                   'awards': 'Won 3 Oscars. Another 5 wins & 9 nominations.',
+                   'poster': 'https://m.media-amazon.com/images/M/MV5BY2IzZGY2YmEtYzljNS00NTM5LTgwMzUtMzM1NjQ4NGI0OTk0XkEyXkFqcGdeQXVyNDYyMDk5MTU@._V1_SX300.jpg',
+                   'ratings': [{'Source': 'Internet Movie Database', 'Value': '8.5/10'},
+                               {'Source': 'Rotten Tomatoes', 'Value': '97%'},
+                               {'Source': 'Metacritic', 'Value': '100/100'}], 'metascore': '100', 'imdb_rating': '8.5',
+                   'imdb_votes': 468884, 'type': 'movie', 'dvd': datetime.date(2000, 2, 15), 'box_office': None,
+                   'production': 'Warner Bros. Pictures', 'website': 'https://www.warnerbros.com/casablanca'}
+    assert build_movie_dict(raw_data) == result_dict
 
 
 def test_replace_na():
@@ -117,3 +119,16 @@ def test_parse_votes():
 def test_parse_boxoffice():
     from movies_api.helpers.movie_helpers import _parse_boxoffice
     assert _parse_boxoffice("$226,276,809") == 226276809
+    assert _parse_boxoffice(None) is None
+
+
+def test_parse_year():
+    from movies_api.helpers.movie_helpers import _parse_year
+    assert _parse_year("2010") == 2010
+    assert _parse_year("2005–2015") == 2005
+
+    with pytest.raises(ValidationError):
+        assert _parse_year(None) is None
+
+    with pytest.raises(ValidationError):
+        _parse_year("Bad year format")
